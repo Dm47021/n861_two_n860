@@ -180,18 +180,13 @@ enum usb_opt_nv_type
         NV_WRITE
 };
 int msm_hsusb_get_set_usb_conf_nv_value(uint32_t nv_item,uint32_t value,uint32_t is_write);
-int get_ftm_from_tag(void);
+//int get_ftm_from_tag(void);
 static int ftm_mode = 0;
 static int got_nv_tag = 0;
 static int got_nv_flag = 1;
 static int is_ftm_mode(void)
 {
 	return !!ftm_mode;
-}
-static void set_ftm_mode(int i)
-{
-	ftm_mode = i;
-	return ;
 }
 static int is_pid_configed_from_nv(void)
 {
@@ -244,7 +239,7 @@ static int config_ftm_from_tag(void)
 		return 0;
 	}
 
-	set_ftm_mode(get_ftm_from_tag());
+	//set_ftm_mode(get_ftm_from_tag());
 	printk("usb: %s, %d: ftm_mode %s\n",
 	       __FUNCTION__, __LINE__,
 	       is_ftm_mode()?"enable":"disable");

@@ -1,7 +1,7 @@
 /* arch/arm/mach-msm/include/mach/memory.h
  *
  * Copyright (C) 2007 Google, Inc.
- * Copyright (c) 2009-2012, Code Aurora Forum. All rights reserved.
+ * Copyright (c) 2009-2011, Code Aurora Forum. All rights reserved.
  *
  * This software is licensed under the terms of the GNU General Public
  * License version 2, as published by the Free Software Foundation, and
@@ -23,13 +23,8 @@
 #define MAX_PHYSMEM_BITS 32
 #define SECTION_SIZE_BITS 28
 
-/* Maximum number of Memory Regions
-*  The largest system can have 4 memory banks, each divided into 8 regions
-*/
-#define MAX_NR_REGIONS 32
-
-/* The number of regions each memory bank is divided into */
-#define NR_REGIONS_PER_BANK 8
+/* Maximum number of Memory Regions */
+#define MAX_NR_REGIONS 4
 
 /* Certain configurations of MSM7x30 have multiple memory banks.
 *  One or more of these banks can contain holes in the memory map as well.
@@ -48,34 +43,11 @@
 
 extern unsigned long ebi1_phys_offset;
 
-#if defined(CONFIG_ZTE_3_CHANNEL_6G_DDR_CFG1)
-#define EBI0_CS1_SIZE 0x10000000 
-#define EBI0_CS1_PHYS_OFFSET 0x20000000
-#define EBI0_CS1_PAGE_OFFSET (EBI0_PAGE_OFFSET + EBI0_SIZE)
-
-#define EBI1_PHYS_OFFSET 0x40000000 // ebi1_phys_offset?
-#define EBI1_PAGE_OFFSET (EBI0_PAGE_OFFSET + EBI0_SIZE + EBI0_CS1_SIZE)
-#else
 #define EBI1_PHYS_OFFSET (ebi1_phys_offset)
 #define EBI1_PAGE_OFFSET (EBI0_PAGE_OFFSET + EBI0_SIZE)
-#endif // CONFIG_ZTE_3_CHANNEL_6G_DDR_CFG1
 
 #if (defined(CONFIG_SPARSEMEM) && defined(CONFIG_VMSPLIT_3G))
-#if defined(CONFIG_ZTE_3_CHANNEL_6G_DDR_CFG1)
-#define __phys_to_virt(phys)				\
-	((phys) >= EBI1_PHYS_OFFSET ?			\
-	(phys) - EBI1_PHYS_OFFSET + EBI1_PAGE_OFFSET :	\
-	((phys) >= EBI0_CS1_PHYS_OFFSET ?			\
-	(phys) - EBI0_CS1_PHYS_OFFSET + EBI0_CS1_PAGE_OFFSET :	\
-	(phys) - EBI0_PHYS_OFFSET + EBI0_PAGE_OFFSET))
 
-#define __virt_to_phys(virt)				\
-	((virt) >= EBI1_PAGE_OFFSET ?			\
-	(virt) - EBI1_PAGE_OFFSET + EBI1_PHYS_OFFSET :	\
-	((virt) >= EBI0_CS1_PAGE_OFFSET ?			\
-	(virt) - EBI0_CS1_PAGE_OFFSET + EBI0_CS1_PHYS_OFFSET :	\
-	(virt) - EBI0_PAGE_OFFSET + EBI0_PHYS_OFFSET))
-#else
 #define __phys_to_virt(phys)				\
 	((phys) >= EBI1_PHYS_OFFSET ?			\
 	(phys) - EBI1_PHYS_OFFSET + EBI1_PAGE_OFFSET :	\
@@ -86,7 +58,6 @@ extern unsigned long ebi1_phys_offset;
 	(virt) - EBI1_PAGE_OFFSET + EBI1_PHYS_OFFSET :	\
 	(virt) - EBI0_PAGE_OFFSET + EBI0_PHYS_OFFSET)
 
-#endif // CONFIG_ZTE_3_CHANNEL_6G_DDR_CFG1
 #endif
 #endif
 
